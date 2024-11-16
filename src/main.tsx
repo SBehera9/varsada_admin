@@ -7,6 +7,8 @@ import Dashboard from './components/page/DashBoard.tsx'
 import MainLayout from './components/UI/layout/MainLayout.tsx'
 import Profile from './components/page/Profile.tsx'
 import ManageOrder from './components/page/ManageOrder.tsx'
+import AccountDetails from './components/page/AccountDetails.tsx'
+import SellerAccount from './components/page/SellerAccount.tsx'
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
   {
     path: '/manageorder',
     element: <MainLayout children={<ManageOrder />} />,
+  },
+  {
+    path: '/accountdetails',
+    element: <MainLayout children={<AccountDetails />} />,
+  },
+  {
+    path: '/selleraccount',
+    element: <MainLayout children={<SellerAccount />} />,
   },
   
 ]);
