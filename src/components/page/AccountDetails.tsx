@@ -73,6 +73,7 @@ const AccountDetails: React.FC = () => {
                     <div>Customer Phone Number: <span className="text-purple-600">{customerDetails.phone}</span></div>
                     <div>Customer Email Address: <span className="text-purple-600">{customerDetails.email}</span></div>
                 </div>
+                
             </div>
 
             {/* Account Status */}

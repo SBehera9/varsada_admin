@@ -9,6 +9,8 @@ import Profile from './components/page/Profile.tsx'
 import ManageOrder from './components/page/ManageOrder.tsx'
 import AccountDetails from './components/page/AccountDetails.tsx'
 import SellerAccount from './components/page/SellerAccount.tsx'
+import ShippingIteams from './components/page/ShippingIteams.tsx'
+import ManageInventory from './components/page/ManageInventory.tsx'
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,15 @@ const router = createBrowserRouter([
     element: <MainLayout children={<SellerAccount />} />,
   },
   
+  {
+    path: '/shippingiteams',
+    element: <MainLayout children={<ShippingIteams />} />,
+  },
+
+  {
+    path: '/manageinventory',
+    element: <MainLayout children={<ManageInventory />} />,
+  },
 ]);
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
