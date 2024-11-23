@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Checkbox, Input, Button, Space, Pagination } from "antd";
+import { Table, Checkbox, Input, Button, Pagination, Space } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
 
 interface Product {
@@ -70,28 +70,18 @@ const Configure: React.FC = () => {
     <div style={{ padding: "16px" }}>
       {/* Header Section */}
       <div style={{ marginBottom: "16px" }}>
-        <h1 style={{ fontSize: "20px", fontWeight: "bold" }}>
-          Configure Categories and Offer
-        </h1>
+        <h1 style={{ fontSize: "20px", fontWeight: "bold" }}>Configure Categories and Offer</h1>
+        {/* Search Bar with Button */}
+        <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+          <Input.Search
+            placeholder="Search"
+            allowClear
+            style={{ width: "300px" }}
+          />
+          <Button type="primary">Search</Button>
+        </div>
       </div>
-
-      {/* Search Section */}
-      <div style={{ marginBottom: "16px" }}>
-        <Input.Search
-          placeholder="Search"
-          allowClear
-          style={{ width: "300px" }}
-        />
-      </div>
-
-      {/* Action Buttons */}
-      <div style={{ marginBottom: "16px" }}>
-        <Space>
-          <Button type="primary">Apply / Edit Discount</Button>
-          <Button type="primary">Create New Category</Button>
-        </Space>
-      </div>
-
+      
       {/* Table Section */}
       <Table
         dataSource={products}
@@ -102,17 +92,16 @@ const Configure: React.FC = () => {
       />
 
       {/* Pagination Section */}
-      <div
-        style={{
-          marginTop: "16px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
-        }}
-      >
+      <div style={{ marginTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span>Displaying 10 of 30 items</span>
         <Pagination defaultCurrent={1} total={30} pageSize={10} />
       </div>
+
+      {/* Action Buttons Section */}
+      <Space style={{ marginTop: "16px", justifyContent: "flex-end", display: "flex" }}>
+        <Button type="primary">Apply / Edit Discount</Button>
+        <Button type="primary">Create New Category</Button>
+      </Space>
     </div>
   );
 };

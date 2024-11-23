@@ -11,6 +11,8 @@ import AccountDetails from './components/page/AccountDetails.tsx'
 import SellerAccount from './components/page/SellerAccount.tsx'
 import ShippingIteams from './components/page/ShippingIteams.tsx'
 import ManageInventory from './components/page/ManageInventory.tsx'
+import ManagePromo from './components/page/ManagePromo.tsx'
+import Configure from './components/page/Configure.tsx'
 
 const router = createBrowserRouter([
   {
@@ -47,6 +49,18 @@ const router = createBrowserRouter([
     path: '/manageinventory',
     element: <MainLayout children={<ManageInventory />} />,
   },
+
+  {
+    path: '/managepromo',
+    element: <MainLayout children={<ManagePromo />} />,
+  },
+
+  {
+    path: '/configure',
+    element: <MainLayout children={<Configure />} />,
+  }
+
+
 ]);
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
