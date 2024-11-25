@@ -8,7 +8,7 @@ export default function SellerAccount() {
 
             {/* Second section with rule and regulation */}
             <section className="mt-10 px-4">
-                <h2 className="text-lg font-medium">Rules and Regulations</h2>
+                <h2 className="text-lg font-medium">m</h2>
                 <p className="mt-4 text-base">Here are the rules and regulations that administrators should follow...</p>
             </section>
         </div>
