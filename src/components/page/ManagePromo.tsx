@@ -1,187 +1,122 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Table } from 'antd'; // Import Ant Design Table component
+import React from 'react';
 
 export default function ManagePromo() {
-  // State to store data fetched from the backend
-  const [data, setData] = useState({
-    itemNo: '', // Field for item number
-    updatedStockDate: '', // Field for the updated stock date
-    updatedStock: {
-      openingStock: 0,
-      newInventory: 0,
-      newOnHandTotal: 0,
-    },
-    productInfo: {
-      name: '',
-      category: '',
-      subCategory: '',
-      expiryDate: '',
-      colors: '',
-      sizes: '',
-      price: '',
-    },
-    stockInfo: {
-      openingStock: 0,
-      stockSold: 0,
-      stockDamaged: 0,
-      onHandStock: 0,
-    },
-    updatedStockHistory: [],
-  });
-
-  // Fetch data from backend
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://your-backend-api.com/api/endpoint'); // Replace with your backend endpoint
-        setData(response.data); // Populate state with the response data
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // Define columns for Ant Design Table
-  const columns = [
-    {
-      title: 'Date',
-      dataIndex: 'date',
-      key: 'date',
-    },
-    {
-      title: 'Opening On Hand Stock',
-      dataIndex: 'openingStock',
-      key: 'openingStock',
-    },
-    {
-      title: 'New Inventory Count',
-      dataIndex: 'newInventory',
-      key: 'newInventory',
-    },
-    {
-      title: 'New On Hand Total',
-      dataIndex: 'newOnHandTotal',
-      key: 'newOnHandTotal',
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_, record) => (
-        <button className="text-blue-500">Edit</button> // Example action
-      ),
-    },
-  ];
-
   return (
-    <div className="container mx-auto p-4">
-      {/* Header Section */}
-      <h1 className="text-lg font-bold mb-4">
-        Item no: {data.itemNo} ({data.productInfo.name})
-      </h1>
+    <div className="p-8 bg-gray-100 min-h-screen">
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h1 className="text-xl font-bold mb-4">Item no: QNC1827817291 (sheela)</h1>
+        
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold mb-2">Updated Stock Information (12/09/2024)</h2>
+          <div className="grid grid-cols-4 gap-4 text-center">
+            <div>
+              <p className="font-medium">Opening On Hand Stock</p>
+              <p className="text-xl">7</p>
+            </div>
+            <div>
+              <p className="font-medium">New Inventory Count</p>
+              <p className="text-xl">10</p>
+            </div>
+            <div>
+              <p className="font-medium">New On Hand Total</p>
+              <p className="text-xl">17</p>
+            </div>
+          </div>
+        </div>
 
-      {/* Updated Stock Information */}
-      <div className="border p-4 rounded mb-4">
-        <h2 className="text-md font-semibold mb-2">
-          Updated Stock Information ({data.updatedStockDate})
-        </h2>
-        <div className="grid grid-cols-4 gap-4">
-          <div>
-            <p>Opening On Hand Stock</p>
-            <p className="font-bold">{data.updatedStock.openingStock}</p>
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold mb-2">Product Information</h2>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <p className="font-medium">Product Name</p>
+              <p>Sheela</p>
+            </div>
+            <div>
+              <p className="font-medium">Product Category</p>
+              <p>Stavn</p>
+            </div>
+            <div>
+              <p className="font-medium">Product Sub-Category</p>
+              <p>Stavn</p>
+            </div>
+            <div>
+              <p className="font-medium">Expiry Date</p>
+              <p>Stavn</p>
+            </div>
+            <div>
+              <p className="font-medium">Colors</p>
+              <p>+12387428345</p>
+            </div>
+            <div>
+              <p className="font-medium">Sizes</p>
+              <p>Individual</p>
+            </div>
+            <div>
+              <p className="font-medium">Price</p>
+              <p>Individual</p>
+            </div>
           </div>
-          <div>
-            <p>New Inventory Count</p>
-            <p className="font-bold">{data.updatedStock.newInventory}</p>
-          </div>
-          <div>
-            <p>New On Hand Total</p>
-            <p className="font-bold">{data.updatedStock.newOnHandTotal}</p>
-          </div>
+          <button className="mt-4 py-2 px-4 bg-blue-500 text-white rounded">Edit</button>
         </div>
-      </div>
 
-      {/* Product Information */}
-      <div className="border p-4 rounded mb-4">
-        <div className="flex justify-between">
-          <h2 className="text-md font-semibold">Product Information</h2>
-          <button className="text-blue-500 underline">Edit ✏️</button>
-        </div>
-        <div className="grid grid-cols-2 gap-4 mt-2">
-          <div>
-            <p>Product Name</p>
-            <p className="font-bold">{data.productInfo.name}</p>
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold mb-2">Stock Information</h2>
+          <div className="grid grid-cols-4 gap-4 text-center">
+            <div>
+              <p className="font-medium">Opening Stock</p>
+              <p className="text-xl">35</p>
+            </div>
+            <div>
+              <p className="font-medium">Stock Sold</p>
+              <p className="text-xl">24</p>
+            </div>
+            <div>
+              <p className="font-medium">Stock Damaged</p>
+              <p className="text-xl">4</p>
+            </div>
+            <div>
+              <p className="font-medium">On Hand Stock</p>
+              <p className="text-xl">7</p>
+            </div>
           </div>
-          <div>
-            <p>Product Category</p>
-            <p className="font-bold">{data.productInfo.category}</p>
-          </div>
-          <div>
-            <p>Product Sub-Category</p>
-            <p className="font-bold">{data.productInfo.subCategory}</p>
-          </div>
-          <div>
-            <p>Expiry Date</p>
-            <p className="font-bold">{data.productInfo.expiryDate}</p>
-          </div>
-          <div>
-            <p>Colors</p>
-            <p className="font-bold">{data.productInfo.colors}</p>
-          </div>
-          <div>
-            <p>Sizes</p>
-            <p className="font-bold">{data.productInfo.sizes}</p>
-          </div>
-          <div>
-            <p>Price</p>
-            <p className="font-bold">{data.productInfo.price}</p>
+          <div className="mt-4 flex space-x-4">
+            <button className="py-2 px-4 bg-blue-500 text-white rounded">Edit Current Stock</button>
+            <button className="py-2 px-4 bg-green-500 text-white rounded">Add New Stock</button>
           </div>
         </div>
-      </div>
 
-      {/* Stock Information */}
-      <div className="border p-4 rounded mb-4">
-        <div className="flex justify-between">
-          <h2 className="text-md font-semibold">Stock Information</h2>
-          <div className="flex space-x-2">
-            <button className="bg-gray-200 p-2 rounded">Edit Current Stock</button>
-            <button className="bg-gray-200 p-2 rounded">Add New Stock</button>
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold mb-2">Updated Stock Information</h2>
+          <table className="min-w-full bg-white border">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="py-2 px-4 border">Date</th>
+                <th className="py-2 px-4 border">Opening On Hand Stock</th>
+                <th className="py-2 px-4 border">New Inventory Count</th>
+                <th className="py-2 px-4 border">New On Hand Total</th>
+                <th className="py-2 px-4 border">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="py-2 px-4 border">24/07/2024</td>
+                <td className="py-2 px-4 border">20</td>
+                <td className="py-2 px-4 border">20</td>
+                <td className="py-2 px-4 border">20</td>
+                <td className="py-2 px-4 border">...</td>
+              </tr>
+              {/* Repeat similar rows */}
+            </tbody>
+          </table>
+          <div className="mt-4 flex justify-between items-center">
+            <p>Displaying 10 of 30 items</p>
+            <div className="flex space-x-2">
+              <button className="py-2 px-4 bg-gray-200 text-gray-600 rounded">1</button>
+              <button className="py-2 px-4 bg-gray-200 text-gray-600 rounded">2</button>
+              <button className="py-2 px-4 bg-gray-200 text-gray-600 rounded">3</button>
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-5 gap-4 mt-2">
-          <div>
-            <p>Opening Stock</p>
-            <p className="font-bold">{data.stockInfo.openingStock}</p>
-          </div>
-          <div>
-            <p>Stock Sold</p>
-            <p className="font-bold">{data.stockInfo.stockSold}</p>
-          </div>
-          <div>
-            <p>Stock Damaged</p>
-            <p className="font-bold">{data.stockInfo.stockDamaged}</p>
-          </div>
-          <div>
-            <p>On Hand Stock</p>
-            <p className="font-bold">{data.stockInfo.onHandStock}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Updated Stock Information Table */}
-      <div className="border p-4 rounded mb-4">
-        <h2 className="text-md font-semibold mb-2">Updated Stock Information</h2>
-        <Table
-          dataSource={data.updatedStockHistory.map((item, index) => ({
-            key: index, // Ant Design requires a unique key for each row
-            ...item,
-          }))}
-          columns={columns}
-          bordered
-          pagination={{ pageSize: 5 }} // Optional pagination
-        />
       </div>
     </div>
   );

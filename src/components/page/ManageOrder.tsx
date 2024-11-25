@@ -1,6 +1,5 @@
 import { useState, useEffect, SetStateAction } from "react";
 import { Table, Input, Select, Button } from "antd";
-import Heading from "../UI/ManageOrder/Heading";
 
 export default function ManageOrder() {
     const [orders, setOrders] = useState<{
@@ -96,7 +95,7 @@ export default function ManageOrder() {
 
     return (
         <div className="p-4">
-            <Heading title="Manage Order" />
+            <h1 className="text-2xl font-bold mb-4">Manage Order</h1>
 
             {/* Search and Filter */}
             <div className="flex items-center justify-between mb-4">
