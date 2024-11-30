@@ -98,7 +98,7 @@ export default function ManageOrder() {
             <h1 className="text-2xl font-bold mb-4">Manage Order</h1>
 
             {/* Search and Filter */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 ">
                 <Input
                     placeholder="Search orders..."
                     value={search}
@@ -120,7 +120,7 @@ export default function ManageOrder() {
 
             {/* Orders Table */}
             <Table
-                columns={columns}
+                columns={columns} 
                 dataSource={filteredOrders}
                 pagination={paginationConfig}
                 rowKey="id" // Unique key for each row

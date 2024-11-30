@@ -9,11 +9,17 @@ import Profile from './components/page/Profile.tsx'
 import ManageOrder from './components/page/ManageOrder.tsx'
 import AccountDetails from './components/page/AccountDetails.tsx'
 import SellerAccount from './components/page/SellerAccount.tsx'
-import ShippingIteams from './components/page/ShippingIteams.tsx'
 import ManageInventory from './components/page/ManageInventory.tsx'
 import ManagePromo from './components/page/ManagePromo.tsx'
 import Configure from './components/page/Configure.tsx'
 import ManageCustomerOrder from './components/page/ManageCustomerOrder.tsx'
+import ProductPriceMaster from './components/page/ProductPriceMaster.tsx'
+import UplodPriceMaster from './components/page/UplodPriceMaster.tsx'
+import Createnewcategory from './components/page/Createnewcategory.tsx'
+import Previewproduct from './components/page/PreviewProduct.tsx'
+import Offer from './components/page/Offer.tsx'
+import Banner from './components/page/BannerImage.tsx'
+import BannerImage from './components/page/BannerImage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -40,11 +46,7 @@ const router = createBrowserRouter([
     path: '/selleraccount',
     element: <MainLayout children={<SellerAccount />} />,
   },
-  
-  {
-    path: '/shippingiteams',
-    element: <MainLayout children={<ShippingIteams />} />,
-  },
+
 
   {
     path: '/manageinventory',
@@ -61,11 +63,43 @@ const router = createBrowserRouter([
     element: <MainLayout children={<Configure />} />,
   },
   
-
   {
     path: '/managecustomerorder',
     element: <MainLayout children={<ManageCustomerOrder />} />,
   },
+
+  {
+    path: '/productpricemaster',
+    element: <MainLayout children={<ProductPriceMaster />} />,
+  },
+
+  {
+    path: '/uplodpricemaster',
+    element: <MainLayout children={<UplodPriceMaster/>} />,
+  },
+
+  {
+    path: '/createnewcategory',
+    element: <MainLayout children={<Createnewcategory/>} />,
+  },
+
+  {
+    path: '/previewproduct',
+    element: <MainLayout children={<Previewproduct/>} />,
+  },
+
+  {
+    path: '/offer',
+    element: <MainLayout children={<Offer/>} />,
+  },
+
+  {
+    path: '/bannerimage',
+    element: <MainLayout children={<BannerImage/>} />,
+  },
+  
+  
+
 
 ]);
 createRoot(document.getElementById('root')!).render(

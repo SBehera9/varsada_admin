@@ -1,21 +1,47 @@
-import React from 'react';
-import { Table, Tag, Input, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Tag, Input, Button, Select } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const ManageInventory: React.FC = () => {
-    // Mock data for the table
-    const data = Array(10).fill('').map((_, index) => ({
-        key: index,
-        itemNo: `QNC1B27B1729${index + 1}`,
-        productName: 'Yang Set',
-        price: '₹ 2,160.00',
-        quantity: 20 - index,
-        soldValue: 10 + index,
-        expiryDate: 'None',
-        availability: index % 2 === 0 ? 'In-stock' : 'Out of stock',
-    }));
+    const [statistics, setStatistics] = useState<any>({});
+    const [lowStockSummary, setLowStockSummary] = useState<any>({});
+    const [tableData, setTableData] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [search, setSearch] = useState<string>('');
+    const [filter, setFilter] = useState<string>('');
 
-    // Columns definition for Ant Design Table
+    const { Option } = Select;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const statsResponse = await axios.get('/api/inventory/statistics');
+                setStatistics(statsResponse.data);
+
+                const lowStockResponse = await axios.get('/api/inventory/low-stock');
+                setLowStockSummary(lowStockResponse.data);
+
+                const tableResponse = await axios.get('/api/inventory/products');
+                setTableData(Array.isArray(tableResponse.data) ? tableResponse.data : []);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setTableData([]); // Fallback to an empty array on error
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Filter and search functionality for inventory table
+    const filteredTableData = tableData.filter((item) => {
+        const matchesSearch = item.productName.toLowerCase().includes(search.toLowerCase());
+        const matchesFilter = filter ? item.availability === filter : true;
+        return matchesSearch && matchesFilter;
+    });
+
     const columns = [
         {
             title: 'Item No',
@@ -31,6 +57,7 @@ const ManageInventory: React.FC = () => {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
+            render: (price: number) => `₹${price.toLocaleString()}`,
         },
         {
             title: 'Quantity',
@@ -41,6 +68,7 @@ const ManageInventory: React.FC = () => {
             title: 'Sold Value',
             dataIndex: 'soldValue',
             key: 'soldValue',
+            render: (value: number) => `₹${value.toLocaleString()}`,
         },
         {
             title: 'Expiry Date',
@@ -66,40 +94,87 @@ const ManageInventory: React.FC = () => {
 
     return (
         <div className="p-5">
+            {/* Header */}
             <div className="flex justify-between items-center mb-5">
                 <h1 className="text-2xl font-bold">Manage Inventory</h1>
-                <div className="flex items-center">
-                    <Input 
-                        placeholder="Search" 
-                        prefix={<SearchOutlined />} 
-                        style={{ marginRight: '8px', width: '200px' }}
-                    />
-                    <Button type="primary">Filter</Button>
+            </div>
+
+            {/* Search and Filter Section */}
+            <div className="flex items-center justify-between mb-5">
+                <Input
+                    placeholder="Search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    prefix={<SearchOutlined />}
+                    style={{ marginRight: '8px', width: '200px' }}
+                />
+                <Select
+                    placeholder="Filter by availability"
+                    value={filter}
+                    onChange={(value) => setFilter(value)}
+                    style={{ width: '200px' }}
+                >
+                    <Option value="">Filter</Option>
+                    <Option value="In-stock">In Stock</Option>
+                    <Option value="Out-of-stock">Out of Stock</Option>
+                </Select>
+            </div>
+
+            {/* Statistics Cards */}
+            <div>
+                <h2 className="text-xl mb-3">Overall Inventory</h2>
+                <div className="grid grid-cols-4 gap-4 mb-5">
+                    <div className="p-5 bg-gray-100 rounded-lg text-center shadow-sm">
+                        <h2 className="text-lg font-semibold">Categories</h2>
+                        <p className="text-2xl">{statistics.categories || 0}</p>
+                    </div>
+                    <div className="p-5 bg-gray-100 rounded-lg text-center shadow-sm">
+                        <h2 className="text-lg font-semibold">Total Products</h2>
+                        <p className="text-2xl">
+                            {statistics.totalProducts || 0}
+                            <br />₹{statistics.inventoryOnHand?.value || 0}
+                        </p>
+                    </div>
+                    <div className="p-5 bg-gray-100 rounded-lg text-center shadow-sm">
+                        <h2 className="text-lg font-semibold">Total Inventory On Hand</h2>
+                        <p className="text-2xl">
+                            {statistics.inventoryOnHand?.units || 0}
+                            <br />₹{statistics.inventoryOnHand?.value || 0}
+                        </p>
+                    </div>
+                    <div className="p-5 bg-gray-100 rounded-lg text-center shadow-sm">
+                        <h2 className="text-lg font-semibold">Top Selling Products (Last 30 Days)</h2>
+                        <p className="text-2xl">
+                            {statistics.topSellingProducts?.units || 0}
+                            <br />₹{statistics.topSellingProducts?.value || 0}
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div className="grid grid-cols-4 gap-4 mb-5">
-                <div className="p-5 bg-gray-100 rounded-lg text-center">
-                    <h2 className="text-lg font-semibold">Categories</h2>
-                    <p className="text-2xl">14</p>
-                </div>
-                <div className="p-5 bg-gray-100 rounded-lg text-center">
-                    <h2 className="text-lg font-semibold">Total Products</h2>
-                    <p className="text-2xl">868 <br />₹25000</p>
-                </div>
-                <div className="p-5 bg-gray-100 rounded-lg text-center">
-                    <h2 className="text-lg font-semibold">Total Inventory On Hand</h2>
-                    <p className="text-2xl">868 <br />₹25000</p>
-                </div>
-                <div className="p-5 bg-gray-100 rounded-lg text-center">
-                    <h2 className="text-lg font-semibold">Top Selling Products (Last 30 Days)</h2>
-                    <p className="text-2xl">Units <br />5<br />₹2500</p>
+
+
+            {/* Low Stock Summary */}
+            <div className="flex justify-center mb-5">
+                <div className="p-5 bg-gray-100 rounded-lg text-center shadow-sm">
+                    <h3 className="text-lg font-semibold">Low InStock Products (Cnt)</h3>
+                    <p className="text-2xl">
+                        Low InStock: {lowStockSummary.lowInStockCount || 0}
+                        <br />
+                        Out of stock: <span className="text-red-500">{lowStockSummary.outOfStockCount || 0}</span>
+                    </p>
                 </div>
             </div>
-            <div className="bg-gray-100 p-5 rounded-lg mb-5 text-center">
-                <h3 className="text-lg font-semibold">Low InStock Products (Cnt)</h3>
-                <p className="text-2xl">Low InStock: 12 <br />Out of stock: 2</p>
-            </div>
-            <Table columns={columns} dataSource={data} pagination={{ pageSize: 10 }} />
+
+
+            {/* Table for Inventory */}
+            <Table
+                columns={columns}
+                dataSource={filteredTableData}
+                rowKey="itemNo"
+                loading={loading}
+                pagination={{ pageSize: 10 }}
+                bordered
+            />
         </div>
     );
 };
