@@ -1,26 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function Previewproduct() {
-  const [product, setProduct] = useState(null);
-  const [size, setSize] = useState(null);
-  const [color, setColor] = useState(null);
-  const [quantity, setQuantity] = useState(1);
-  const [pinCode, setPinCode] = useState('');
+interface Product {
+  productName: string;
+  price: number;
+  description: string;
+  sizes: string[];
+  colors: string[];
+  stock: number;
+  image: string;
+  deliveryOptions: {
+    fastDelivery: string;
+    standardDelivery: string;
+  };
+}
+
+export default function PreviewProduct(): JSX.Element {
+  const [product, setProduct] = useState<Product | null>(null);
+  const [size, setSize] = useState<string | null>(null);
+  const [color, setColor] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [pinCode, setPinCode] = useState<string>('');
 
   useEffect(() => {
-    // Fetch product data from the backend
     const fetchProduct = async () => {
       try {
-        const response = await fetch('/api/product'); // Replace with your API endpoint
+        const response = await fetch('/api/product'); 
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        const data = await response.json();
+        const data: Product = await response.json();
         setProduct(data);
       } catch (error) {
         console.error('Error fetching product data:', error);
-        // Optionally, set default product data here if fetch fails
         setProduct({
           productName: "Girl's Long Sleeve Deep Uneck Hollow out Pleated mini dress",
           price: 2160,
@@ -31,8 +43,8 @@ export default function Previewproduct() {
           image: '/path-to-your-image.jpg',
           deliveryOptions: {
             fastDelivery: "Fast Delivery available on some sizes: Free Shipping over ₹2,990",
-            standardDelivery: "Standard Delivery: Free Shipping over ₹2,990"
-          }
+            standardDelivery: "Standard Delivery: Free Shipping over ₹2,990",
+          },
         });
       }
     };
@@ -40,24 +52,24 @@ export default function Previewproduct() {
     fetchProduct();
   }, []);
 
-  const handleSizeClick = (selectedSize) => {
+  const handleSizeClick = (selectedSize: string) => {
     setSize(selectedSize);
   };
 
-  const handleColorClick = (selectedColor) => {
+  const handleColorClick = (selectedColor: string) => {
     setColor(selectedColor);
   };
 
-  const handleQuantityChange = (event) => {
-    setQuantity(event.target.value);
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuantity(Number(event.target.value));
   };
 
-  const handlePinCodeChange = (event) => {
+  const handlePinCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPinCode(event.target.value);
   };
 
   const checkDelivery = () => {
-    // Add delivery check logic here
+    console.log(`Checking delivery for pin code: ${pinCode}`);
   };
 
   if (!product) {
@@ -68,11 +80,7 @@ export default function Previewproduct() {
     <div className="container my-5">
       <div className="row">
         <div className="col-md-6">
-          <img
-            src={product.image}
-            alt="Product"
-            className="img-fluid"
-          />
+          <img src={product.image} alt="Product" className="img-fluid" />
         </div>
         <div className="col-md-6">
           <h2>{product.productName}</h2>
@@ -133,7 +141,9 @@ export default function Previewproduct() {
               value={pinCode}
               onChange={handlePinCodeChange}
             />
-            <button className="btn btn-secondary mt-2" onClick={checkDelivery}>Check</button>
+            <button className="btn btn-secondary bg-[#C473FF] text-white hover:bg-[#C473FF] mt-2" onClick={checkDelivery}>
+              Check
+            </button>
           </div>
           <div className="mb-3">
             <h5>Delivery Options</h5>
@@ -144,11 +154,9 @@ export default function Previewproduct() {
           </div>
           <div className="mb-3">
             <h5>Specifications</h5>
-            <button className="btn btn-link">+</button>
           </div>
           <div className="mb-3">
             <h5>Service & Policy</h5>
-            <button className="btn btn-link">+</button>
           </div>
         </div>
       </div>

@@ -3,10 +3,38 @@ import { Table, Tag, Input, Button, Select } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
+interface Statistics {
+    categories?: number;
+    totalProducts?: number;
+    inventoryOnHand?: {
+        units: number;
+        value: number;
+    };
+    topSellingProducts?: {
+        units: number;
+        value: number;
+    };
+}
+
+interface LowStockSummary {
+    lowInStockCount?: number;
+    outOfStockCount?: number;
+}
+
+interface TableData {
+    itemNo: string;
+    productName: string;
+    price: number;
+    quantity: number;
+    soldValue: number;
+    expiryDate: string;
+    availability: string;
+}
+
 const ManageInventory: React.FC = () => {
-    const [statistics, setStatistics] = useState<any>({});
-    const [lowStockSummary, setLowStockSummary] = useState<any>({});
-    const [tableData, setTableData] = useState<any[]>([]);
+    const [statistics, setStatistics] = useState<Statistics>({});
+    const [lowStockSummary, setLowStockSummary] = useState<LowStockSummary>({});
+    const [tableData, setTableData] = useState<TableData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [search, setSearch] = useState<string>('');
     const [filter, setFilter] = useState<string>('');
@@ -26,7 +54,7 @@ const ManageInventory: React.FC = () => {
                 setTableData(Array.isArray(tableResponse.data) ? tableResponse.data : []);
             } catch (error) {
                 console.error('Error fetching data:', error);
-                setTableData([]); // Fallback to an empty array on error
+                setTableData([]); 
             } finally {
                 setLoading(false);
             }
@@ -35,7 +63,6 @@ const ManageInventory: React.FC = () => {
         fetchData();
     }, []);
 
-    // Filter and search functionality for inventory table
     const filteredTableData = tableData.filter((item) => {
         const matchesSearch = item.productName.toLowerCase().includes(search.toLowerCase());
         const matchesFilter = filter ? item.availability === filter : true;
@@ -94,7 +121,6 @@ const ManageInventory: React.FC = () => {
 
     return (
         <div className="p-5">
-            {/* Header */}
             <div className="flex justify-between items-center mb-5">
                 <h1 className="text-2xl font-bold">Manage Inventory</h1>
             </div>
@@ -120,7 +146,6 @@ const ManageInventory: React.FC = () => {
                 </Select>
             </div>
 
-            {/* Statistics Cards */}
             <div>
                 <h2 className="text-xl mb-3">Overall Inventory</h2>
                 <div className="grid grid-cols-4 gap-4 mb-5">
@@ -152,8 +177,6 @@ const ManageInventory: React.FC = () => {
                 </div>
             </div>
 
-
-            {/* Low Stock Summary */}
             <div className="flex justify-center mb-5">
                 <div className="p-5 bg-gray-100 rounded-lg text-center shadow-sm">
                     <h3 className="text-lg font-semibold">Low InStock Products (Cnt)</h3>
@@ -165,8 +188,6 @@ const ManageInventory: React.FC = () => {
                 </div>
             </div>
 
-
-            {/* Table for Inventory */}
             <Table
                 columns={columns}
                 dataSource={filteredTableData}

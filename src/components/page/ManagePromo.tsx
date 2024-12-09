@@ -1,20 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Spin, message } from "antd";
 
+// Define the types for the fetched data
+interface StockInfo {
+  openingStock: number;
+  newInventory: number;
+  onHandTotal: number;
+  totalOpeningStock: number;
+  stockSold: number;
+  stockDamaged: number;
+  onHandStock: number;
+}
+
+interface ProductInfo {
+  itemNumber: string;
+  productName: string;
+  category: string;
+  subCategory: string;
+  expiryDate: string;
+  colors: string;
+  sizes: string;
+  price: string;
+}
+
+interface StockHistory {
+  date: string;
+  openingStock: number;
+  newInventory: number;
+  onHandTotal: number;
+}
+
 export default function ManagePromo() {
-  const [loading, setLoading] = useState(false);
-  const [stockInfo, setStockInfo] = useState({});
-  const [productInfo, setProductInfo] = useState({});
-  const [stockHistory, setStockHistory] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [stockInfo, setStockInfo] = useState<StockInfo | {}>({});
+  const [productInfo, setProductInfo] = useState<ProductInfo | {}>({});
+  const [stockHistory, setStockHistory] = useState<StockHistory[]>([]);
 
   useEffect(() => {
     // Fetch data from the backend
     setLoading(true);
-    fetch("/api/get-stock-data") // Replace with your API endpoint
+    fetch("/api/get-stock-data") 
       .then((response) => response.json())
       .then((data) => {
-        // Assuming the API response structure matches:
-        // { stockInfo: {}, productInfo: {}, stockHistory: [] }
+        
         setStockInfo(data.stockInfo);
         setProductInfo(data.productInfo);
         setStockHistory(data.stockHistory);
@@ -119,7 +147,7 @@ export default function ManagePromo() {
             <p>{productInfo.price}</p>
           </div>
         </div>
-        <button className="mt-4 py-2 px-4 bg-blue-500 text-white rounded">
+        <button className="mt-4 py-2 px-4 bg-[#C473FF] text-white hover:bg-[#C473FF] rounded">
           Edit
         </button>
       </div>
@@ -146,10 +174,10 @@ export default function ManagePromo() {
           </div>
         </div>
         <div className="mt-4 flex space-x-4">
-          <button className="py-2 px-4 bg-blue-500 text-white rounded">
+          <button className="py-2 px-4 bg-[#C473FF] text-white hover:bg-[#C473FF] rounded">
             Edit Current Stock
           </button>
-          <button className="py-2 px-4 bg-green-500 text-white rounded">
+          <button className="py-2 px-4 bg-[#C473FF] text-white hover:bg-[#C473FF] rounded">
             Add New Stock
           </button>
         </div>

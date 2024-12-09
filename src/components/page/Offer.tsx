@@ -11,6 +11,11 @@ interface Offer {
     isActive: boolean;
 }
 
+interface FetchOffersResponse {
+    offers: Offer[];
+    total: number;
+}
+
 const Offer: React.FC = () => {
     const [offers, setOffers] = useState<Offer[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -26,9 +31,9 @@ const Offer: React.FC = () => {
 
     const fetchOffers = async () => {
         setLoading(true);
-        setError(null); // Clear any previous errors
+        setError(null); 
         try {
-            const response = await axios.get('/api/offers', {
+            const response = await axios.get<FetchOffersResponse>('/api/offers', {
                 params: {
                     page: currentPage,
                     pageSize,
@@ -36,11 +41,14 @@ const Offer: React.FC = () => {
                 },
             });
 
-            const { offers = [], total = 0 } = response.data || {};
-            setOffers(offers);
-            setTotalItems(total);
+            setOffers(response.data.offers || []);
+            setTotalItems(response.data.total || 0);
         } catch (error) {
-            setError('Failed to fetch offers. Please try again later.');
+            if (axios.isAxiosError(error)) {
+                setError(error.response?.data?.message || 'Failed to fetch offers.');
+            } else {
+                setError('An unexpected error occurred.');
+            }
             setOffers([]);
             setTotalItems(0);
         } finally {
@@ -53,7 +61,7 @@ const Offer: React.FC = () => {
             title: 'Banner Image',
             dataIndex: 'bannerImage',
             key: 'bannerImage',
-            render: (text: string) => <img src={text} alt="Banner" style={{ width: '100px' }} />,
+            render: (url: string) => <img src={url} alt="Banner" style={{ width: '100px' }} />,
         },
         {
             title: 'Name',
@@ -71,21 +79,21 @@ const Offer: React.FC = () => {
             key: 'endDate',
         },
         {
-            title: 'Action',
+            title: 'Status',
             dataIndex: 'isActive',
             key: 'isActive',
-            render: (text: boolean, record: Offer) => (
-                <Switch checked={text} onChange={() => handleSwitchChange(record.id)} />
+            render: (isActive: boolean, record: Offer) => (
+                <Switch checked={isActive} onChange={() => handleToggleSwitch(record.id)} />
             ),
         },
         {
             title: 'Action',
             key: 'action',
-            render: () => <Button type="link">...</Button>,
+            render: () => <Button type="link">Details</Button>,
         },
     ];
 
-    const handleSwitchChange = (id: number) => {
+    const handleToggleSwitch = (id: number) => {
         setOffers(prevOffers =>
             prevOffers.map(offer =>
                 offer.id === id ? { ...offer, isActive: !offer.isActive } : offer
@@ -94,7 +102,8 @@ const Offer: React.FC = () => {
     };
 
     const handleSearch = () => {
-        fetchOffers(); // Trigger search manually when button is clicked
+        setCurrentPage(1); 
+        fetchOffers();
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,7 +128,7 @@ const Offer: React.FC = () => {
                         onChange={handleInputChange}
                         style={{ width: 200 }}
                     />
-                    <Button type="primary" onClick={handleSearch}>
+                    <Button className='bg-[#C473FF] text-white hover:bg-[#C473FF]' onClick={handleSearch}>
                         Create Banner
                     </Button>
                 </div>
@@ -150,7 +159,7 @@ const Offer: React.FC = () => {
 
             {!loading && !error && (
                 <div className="flex justify-between items-center mt-4">
-                    <span>Displaying {offers?.length || 0} of {totalItems || 0} items</span>
+                    <span>Displaying {offers.length} of {totalItems} items</span>
                     <Pagination
                         current={currentPage}
                         pageSize={pageSize}

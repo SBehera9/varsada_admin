@@ -1,50 +1,60 @@
 import React, { useState, useEffect } from "react";
 import { Table, Input, Button, Space, Dropdown, Menu, Select } from "antd";
 import { SearchOutlined, UploadOutlined, PlusOutlined, EllipsisOutlined } from "@ant-design/icons";
-import axios from "axios"; // Import axios for making API requests
+import axios from "axios"; 
+import type { MenuProps } from "antd";
 
 const { Option } = Select;
 
-const ProductPriceMaster = () => {
-  // State to store the fetched product data
-  const [dataSource, setDataSource] = useState([]);
-  const [filter, setFilter] = useState(""); // Store the selected filter value
-  const [filteredData, setFilteredData] = useState([]);
+interface Product {
+  itemNo: number;
+  productName: string;
+  color: string;
+  uom: string;
+  price: string;
+  selling: number;
+}
 
-  // Function to fetch data from the backend API
+const ProductPriceMaster: React.FC = () => {
+  const [dataSource, setDataSource] = useState<Product[]>([]); 
+  const [filter, setFilter] = useState<string>(""); 
+  const [filteredData, setFilteredData] = useState<Product[]>([]);
+
   const fetchProductData = async () => {
     try {
-      const response = await axios.get("https://your-backend-api.com/products"); // Replace with your backend URL
-      console.log(response.data); // Log data to ensure it's fetched correctly
-      setDataSource(response.data); // Update state with fetched data
-      setFilteredData(response.data); // Initially set filtered data to all products
+      const response = await axios.get<Product[]>("https://your-backend-api.com/products"); 
+      console.log(response.data); 
+      setDataSource(response.data); 
+      setFilteredData(response.data); 
     } catch (error) {
       console.error("Error fetching data", error);
     }
   };
 
-  // Fetch data when the component mounts
   useEffect(() => {
     fetchProductData();
   }, []);
 
-  // Filter function
-  const handleFilterChange = (value) => {
+  const handleFilterChange = (value: string) => {
     setFilter(value);
 
-    // Filtering logic based on selected filter value
     if (value === "price") {
-      const filtered = dataSource.filter(item => item.price.includes("₹"));
+      const filtered = dataSource.filter((item) => item.price.includes("₹"));
       setFilteredData(filtered);
     } else if (value === "color") {
-      const filtered = dataSource.filter(item => item.color);
+      const filtered = dataSource.filter((item) => item.color);
       setFilteredData(filtered);
     } else {
-      setFilteredData(dataSource); // Reset to full data if no filter is selected
+      setFilteredData(dataSource); 
     }
   };
 
-  // Table columns
+  const menuItems: MenuProps["items"] = [
+    { label: "Edit", key: "1" },
+    { label: "Activate", key: "2" },
+    { label: "Hide", key: "3" },
+  ];
+
   const columns = [
     {
       title: "Item No",
@@ -80,16 +90,7 @@ const ProductPriceMaster = () => {
       title: "Action",
       key: "action",
       render: () => (
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key="1">Edit</Menu.Item>
-              <Menu.Item key="2">Activate</Menu.Item>
-              <Menu.Item key="3">Hide</Menu.Item>
-            </Menu>
-          }
-          trigger={['click']}
-        >
+        <Dropdown overlay={<Menu items={menuItems} />} trigger={["click"]}>
           <Button icon={<EllipsisOutlined />} />
         </Dropdown>
       ),
@@ -119,17 +120,18 @@ const ProductPriceMaster = () => {
           </Select>
         </Space>
         <div style={{ display: "flex", gap: "10px" }}>
-          <Button icon={<UploadOutlined />}>Upload Bulk Product File</Button>
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button className="bg-[#C473FF] text-white hover:bg-[#C473FF]" icon={<UploadOutlined />}>Upload Bulk Product File</Button>
+          <Button className="bg-[#C473FF] text-white hover:bg-[#C473FF]" icon={<PlusOutlined />}>
             Create New Product
           </Button>
         </div>
       </div>
-      <Table
-        dataSource={filteredData} // Use filtered data here
+      <Table<Product>
+        dataSource={filteredData} 
         columns={columns}
         pagination={{ pageSize: 5 }}
         bordered
+        rowKey="itemNo" 
       />
     </div>
   );

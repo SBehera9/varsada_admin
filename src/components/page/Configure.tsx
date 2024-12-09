@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Checkbox, Input, Button, Pagination, Space } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
-import axios from "axios"; // Import axios for API calls
+import axios from "axios"; 
 
 interface Product {
   id: number;
@@ -12,16 +12,21 @@ interface Product {
   offer: string;
 }
 
+interface PaginationProps {
+  current: number;
+  pageSize: number;
+  total: number;
+}
+
 const Configure: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);  // State to store products
-  const [loading, setLoading] = useState<boolean>(false);  // Loading state
-  const [pagination, setPagination] = useState({
+  const [products, setProducts] = useState<Product[]>([]);  
+  const [loading, setLoading] = useState<boolean>(false);  
+  const [pagination, setPagination] = useState<PaginationProps>({
     current: 1,
     pageSize: 10,
     total: 30,
   });
 
-  // Fetch products data from the backend
   const fetchProducts = async (page: number = 1, pageSize: number = 10) => {
     setLoading(true);
     try {
@@ -32,12 +37,10 @@ const Configure: React.FC = () => {
         },
       });
 
-      // Assuming the response has the following structure
-      // { data: [], total: 30 }
       setProducts(response.data.data); 
       setPagination({
         ...pagination,
-        total: response.data.total,  // Total items for pagination
+        total: response.data.total,  
       });
     } catch (error) {
       console.error("Error fetching products", error);
@@ -46,7 +49,6 @@ const Configure: React.FC = () => {
     }
   };
 
-  // Effect to load the products when the component mounts
   useEffect(() => {
     fetchProducts(pagination.current, pagination.pageSize);
   }, [pagination.current, pagination.pageSize]);
@@ -94,40 +96,42 @@ const Configure: React.FC = () => {
 
   return (
     <div style={{ padding: "16px" }}>
-      {/* Header Section */}
       <div style={{ marginBottom: "16px" }}>
         <h1 style={{ fontSize: "20px", fontWeight: "bold" }}>
           Configure Categories and Offer
         </h1>
 
-        {/* Search Bar with Button */}
         <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-          <Input.Search
-            placeholder="Search"
-            allowClear
-            style={{ width: "300px" }}
-          />
-          <Button type="primary">Search</Button>
+  <Input.Search
+    placeholder="Search"
+    allowClear
+    style={{ width: "300px" }}
+  />
+  <Button className="bg-[#C473FF] text-white hover:bg-[#C473FF]">
+    Search
+  </Button>
 
-          {/* Action Buttons Section moved above the search */}
-          <Space style={{ marginBottom: "16px" }}>
-            <Button type="primary">Apply / Edit Discount</Button>
-            <Button type="primary">Create New Category</Button>
-          </Space>
-        </div>
+  <Space style={{ marginBottom: "16px" }}>
+    <Button className="bg-[#C473FF] text-white hover:bg-[#C473FF]">
+      Apply / Edit Discount
+    </Button>
+    <Button className="bg-[#C473FF] text-white hover:bg-[#7a3ea5] hover:text-white">
+      Create New Category
+    </Button>
+  </Space>
+</div>
+
       </div>
 
-      {/* Table Section */}
       <Table
         dataSource={products}
         columns={columns}
-        pagination={false}  // Disable table pagination for custom pagination below
+        pagination={false}  
         rowKey="id"
         bordered
         loading={loading}
       />
 
-      {/* Pagination Section */}
       <div
         style={{
           marginTop: "16px",

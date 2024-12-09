@@ -23,8 +23,7 @@ const AccountDetails: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Fetch customer details from the backend
-        axios.get<CustomerDetails>('/api/customer-details') // Adjust the URL to your actual endpoint
+        axios.get<CustomerDetails>('/api/customer-details')  
             .then(response => {
                 setCustomerDetails(response.data);
                 setLoading(false);
@@ -49,7 +48,6 @@ const AccountDetails: React.FC = () => {
 
     return (
         <div className="p-6">
-            {/* Heading with button on the right */}
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-3xl font-bold">Account Details</h1>
                 <button className="bg-[#C473FF] text-white px-4 py-2 rounded-md">
@@ -57,7 +55,6 @@ const AccountDetails: React.FC = () => {
                 </button>
             </div>
 
-            {/* Customer Information */}
             <div className="bg-white shadow-md rounded-lg p-4 mb-6">
                 <div className="flex justify-between items-center mb-2">
                     <h2 className="text-xl font-semibold">Customer Information</h2>
@@ -73,10 +70,8 @@ const AccountDetails: React.FC = () => {
                     <div>Customer Phone Number: <span className="text-purple-600">{customerDetails.phone}</span></div>
                     <div>Customer Email Address: <span className="text-purple-600">{customerDetails.email}</span></div>
                 </div>
-                
             </div>
 
-            {/* Account Status */}
             <div className="bg-white shadow-md rounded-lg p-4 mb-6">
                 <div className="flex justify-between items-center mb-2">
                     <h2 className="text-xl font-semibold">Account Status</h2>
@@ -89,7 +84,6 @@ const AccountDetails: React.FC = () => {
                 </div>
             </div>
 
-            {/* Other Information */}
             <div className="bg-white shadow-md rounded-lg p-4">
                 <div className="flex justify-between items-center mb-2">
                     <h2 className="text-xl font-semibold">Other Information</h2>

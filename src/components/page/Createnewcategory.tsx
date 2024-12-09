@@ -1,32 +1,39 @@
 import React, { useState } from 'react';
 
-export default function Createnewcategory() {
-    const [categoryName, setCategoryName] = useState('');
-    const [productName, setProductName] = useState('');
-    const [discountRate, setDiscountRate] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [error, setError] = useState('');
+interface CategoryFormData {
+    categoryName: string;
+    productName: string;
+    discountRate: string;
+    startDate: string;
+    endDate: string;
+}
 
-    const handleSubmit = (e) => {
+export default function Createnewcategory() {
+    const [categoryName, setCategoryName] = useState<string>('');
+    const [productName, setProductName] = useState<string>('');
+    const [discountRate, setDiscountRate] = useState<string>('');
+    const [startDate, setStartDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
+    const [error, setError] = useState<string>('');
+
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Basic validation
         if (!categoryName || !productName || !discountRate || !startDate || !endDate) {
             setError('All fields are required');
             return;
         }
         
-        // Handle form submission logic here
-        console.log({
+        const formData: CategoryFormData = {
             categoryName,
             productName,
             discountRate,
             startDate,
-            endDate
-        });
+            endDate,
+        };
 
-        // Clear the form after submission
+        console.log(formData);
+
         setCategoryName('');
         setProductName('');
         setDiscountRate('');
@@ -41,7 +48,7 @@ export default function Createnewcategory() {
                 <h2 className="text-2xl font-bold">Create New Category</h2>
                 <button
                     type="submit"
-                    className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+                    className="bg-[#C473FF] text-white px-4 py-2 rounded hover:bg-[#7840a1]"
                     onClick={handleSubmit}
                 >
                     Update
